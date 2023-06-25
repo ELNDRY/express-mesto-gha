@@ -1,12 +1,25 @@
 const express = require('express');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const usersRouter = require('./routes/users');
+const cardsRouter = require('./routes/cards')
 
 const app = express();
-app.get('/', (request, response, next) => {
-  response.send('<h2>Привет Express!</h2>');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }))
+
+app.use((req, res, next) => {
+  req.user = {
+    _id: '6498733a9e78158f9484dd02', // вставьте сюда _id созданного в предыдущем пункте пользователя
+  };
 
   next();
 });
 
-mongoose.connect('mongodb://localhost:27017/mestodb')
+app.use('/', usersRouter);
+app.use('/', cardsRouter);
+
+mongoose.connect('mongodb://0.0.0.0:27017/mestodb');
+
 app.listen(3000);
