@@ -11,7 +11,7 @@ const createCard = (req, res) => {
   Card.create({ name, link, owner: req.user._id })
     .then((card) => res.status(201).json(card))
     .catch((err) => {
-      if (err === 'ValidationError') {
+      if (err.name === 'ValidationError') {
         return res.status(400).send({ message: 'Переданы некорректные данные при создании карточки.' });
       }
       return res.status(500).send({ message: err.message });
@@ -25,7 +25,7 @@ const deleteCard = (req, res) => {
     .orFail()
     .then((card) => res.status(200).json({ card }))
     .catch((err) => {
-      if (err === 'DocumentNotFoundError') {
+      if (err.name === 'DocumentNotFoundError') {
         return res.status(404).send({ message: 'Карточка с указанным _id не найдена.' });
       }
       return res.status(500).send({ message: err.message });
@@ -40,9 +40,9 @@ const likeCard = (req, res) => {
     .orFail()
     .then((card) => res.json({ card }))
     .catch((err) => {
-      if (err === 'ValidationError') {
+      if (err.name === 'ValidationError') {
         return res.status(400).send({ message: 'Переданы некорректные данные для постановки лайка.' });
-      } if (err === 'DocumentNotFoundError') {
+      } if (err.name === 'DocumentNotFoundError') {
         return res.status(404).send({ message: 'Передан несуществующий _id карточки.' });
       }
       return res.status(500).send({ message: err.message });
@@ -57,9 +57,9 @@ const dislikeCard = (req, res) => {
     .orFail()
     .then((card) => res.json({ card }))
     .catch((err) => {
-      if (err === 'ValidationError') {
+      if (err.name === 'ValidationError') {
         return res.status(400).send({ message: 'Переданы некорректные данные для с лайка.' });
-      } if (err === 'DocumentNotFoundError') {
+      } if (err.name === 'DocumentNotFoundError') {
         return res.status(404).send({ message: 'Передан несуществующий _id карточки.' });
       }
       return res.status(500).send({ message: err.message });

@@ -42,9 +42,9 @@ const editProfile = (req, res) => {
     .orFail()
     .then((user) => res.json(user))
     .catch((err) => {
-      if (err === 'ValidationError') {
+      if (err.name === 'ValidationError') {
         res.status(400).send({ message: 'Переданы некорректные данные при обновлении профиля.' });
-      } else if (err === 'DocumentNotFoundError') {
+      } else if (err.name === 'DocumentNotFoundError') {
         res.status(404).send({ message: 'Пользователь с указанным _id не найден.' });
       }
       return res.status(500).send({ message: err.message });
@@ -59,9 +59,9 @@ const editAvatar = (req, res) => {
     .orFail()
     .then((user) => res.json(user))
     .catch((err) => {
-      if (err === 'ValidationError') {
+      if (err.name === 'ValidationError') {
         res.status(400).send({ message: 'Переданы некорректные данные при обновлении аватара.' });
-      } else if (err === 'DocumentNotFoundError') {
+      } else if (err.name === 'DocumentNotFoundError') {
         res.status(404).send({ message: 'Пользователь с указанным _id не найден.' });
       }
       return res.status(500).send({ message: err.message });
