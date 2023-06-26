@@ -25,6 +25,9 @@ const deleteCard = (req, res) => {
     .orFail()
     .then((card) => res.status(200).json({ card }))
     .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(400).send({ message: 'Карточка с указанным _id не найдена.' });
+      }
       if (err.name === 'DocumentNotFoundError') {
         return res.status(404).send({ message: 'Карточка с указанным _id не найдена.' });
       }
@@ -41,8 +44,9 @@ const likeCard = (req, res) => {
     .then((card) => res.json({ card }))
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(400).send({ message: 'Переданы некорректные данные для постановки лайка.' });
-      } if (err.name === 'DocumentNotFoundError') {
+        return res.status(400).send({ message: 'Передан некорректный id для удаления карточки.' });
+      }
+      if (err.name === 'DocumentNotFoundError') {
         return res.status(404).send({ message: 'Передан несуществующий _id карточки.' });
       }
       return res.status(500).send({ message: err.message });
