@@ -28,12 +28,13 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(limiter);
+
 app.use('/', usersRouter);
 app.use('/', cardsRouter);
 app.use('*', (req, res) => {
   res.status(404).send({ message: 'Страница не найдена.' });
 });
-app.use(limiter);
 
 mongoose.connect('mongodb://0.0.0.0:27017/mestodb');
 
