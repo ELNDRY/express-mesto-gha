@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 
+const PORT = process.env.PORT || 3000;
+
 const app = express();
 
 app.use(bodyParser.json());
@@ -25,4 +27,4 @@ app.use('*', (req, res) => {
 
 mongoose.connect('mongodb://0.0.0.0:27017/mestodb');
 
-app.listen(3000);
+app.listen(PORT);
