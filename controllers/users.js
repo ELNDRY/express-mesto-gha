@@ -1,10 +1,12 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const { jwtSecret, saltLength } = require('../config/authConfig');
 const NotFoundError = require('../errors/NotFoundError');
 const AlreadyExistsError = require('../errors/AlreadyExistsError');
 const BadRequestError = require('../errors/BadRequestError');
+const UnauthorizedError = require('../errors/UnauthorizedError');
+
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 const getUsers = (req, res, next) => {
   User.find({})
@@ -48,7 +50,7 @@ const createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
-  bcrypt.hash(password, saltLength || 10)
+  bcrypt.hash(password, 10)
     .then((hash) => User.create({
       name, about, avatar, email, password: hash,
     }))
@@ -108,19 +110,18 @@ const editAvatar = (req, res, next) => {
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
-
-  return User.findUserByCredentials(email, password)
+  return User.findUserByCredentials({ email, password })
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, jwtSecret, { expiresIn: '6h' });
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
       res.cookie('jwt', token, {
-        maxAge: 60 * 60 * 1000 * 24 * 7,
+        maxAge: 60 * 60 * 24 * 7,
         httpOnly: true,
       })
         .status(200)
         .send({ message: 'Успешная авторизация.' });
     })
     .catch((err) => {
-      next(err);
+      next(new UnauthorizedError(err.message));
     });
 };
 
