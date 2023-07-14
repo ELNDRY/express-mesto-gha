@@ -54,10 +54,11 @@ const createUser = (req, res, next) => {
     }))
     .then((user) => res.status(201).json(user.toJSON()))
     .catch((err) => {
-      if (err.code === 11000) {
-        throw new AlreadyExistsError('Пользователь с данным e-mail уже существует.');
-      } else if (err.name === 'ValidationError') {
-        throw new BadRequestError('Переданы некорректные данные при регистрации.');
+      console.log(err);
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('Переданы некорректные данные при регистрации.'));
+      } else if (err.code === 11000) {
+        next(new AlreadyExistsError('Пользователь с данным e-mail уже существует.'));
       } else {
         next(err);
       }

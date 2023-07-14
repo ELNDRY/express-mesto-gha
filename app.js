@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const { errors } = require('celebrate');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 const authRouter = require('./routes/auth');
@@ -33,6 +34,8 @@ app.use('/', cardsRouter);
 app.use('*', (req, res, next) => {
   next(new NotFoundError('Страница не найдена.'));
 });
+
+app.use(errors());
 app.use(errorHandler);
 
 mongoose.connect('mongodb://0.0.0.0:27017/mestodb');

@@ -16,6 +16,11 @@ router.post('/signup', celebrate({
   }),
 }), controller.createUser);
 
-router.post('/signin', controller.login);
+router.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+  }),
+}), controller.login);
 
 module.exports = router;
