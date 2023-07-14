@@ -9,7 +9,7 @@ const cardsRouter = require('./routes/cards');
 const authRouter = require('./routes/auth');
 const authVerifier = require('./middlewares/auth');
 const errorHandler = require('./middlewares/errorHandler');
-const NotFoundError = require('./errors/NotFoundError')
+const NotFoundError = require('./errors/NotFoundError');
 
 const PORT = process.env.PORT || 3000;
 

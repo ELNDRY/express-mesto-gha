@@ -24,13 +24,22 @@ const createCard = (req, res, next) => {
 
 const deleteCard = (req, res, next) => {
   const { cardId } = req.params;
+  const userId = req.user._id;
 
   Card.findByIdAndDelete(cardId)
     .orFail()
-    .then((card) => res.status(200).json({ card }))
+    .then((card) => {
+      if (!card) {
+        throw new NotFoundError('Карточка с указанным _id не найдена.');
+      } else if (card.owner.toHexString() !== userId) {
+        throw new ForbiddenError('Нет права на удаление данной карточки.');
+      }
+      return card.remove()
+        .then(() => res.status(200).json({ message: 'Карточка удалена.' }));
+    })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequestError('Карточка с указанным _id не найдена.');
+        throw new BadRequestError('Передан некорректный _id.');
       } else if (err.name === 'DocumentNotFoundError') {
         throw new NotFoundError('Карточка с указанным _id не найдена.');
       } else {

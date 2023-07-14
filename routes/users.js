@@ -2,7 +2,7 @@ const express = require('express');
 const { celebrate, Joi } = require('celebrate');
 const validator = require('validator');
 const controller = require('../controllers/users');
-const BadRequestError = require('../errors/BadRequestError')
+const BadRequestError = require('../errors/BadRequestError');
 
 const router = express.Router();
 
