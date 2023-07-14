@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const error = require('../utils/errorStatusCodes');
+const { jwtSecret, saltLength } = require('../config/authConfig');
 
 const getUsers = (req, res) => {
   User.find({})
@@ -29,8 +31,7 @@ const createUser = (req, res) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
-
-  bcrypt.hash(req.body.password, 10)
+  bcrypt.hash(password, saltLength || 10)
     .then((hash) => User.create({
       name, about, avatar, email, password: hash,
     }))
@@ -80,10 +81,29 @@ const editAvatar = (req, res) => {
     });
 };
 
+const login = (req, res) => {
+  const { email, password } = req.body;
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, jwtSecret, { expiresIn: '6h' });
+      res.cookie('jwt', token, {
+        maxAge: 60 * 60 * 1000,
+        httpOnly: true,
+      })
+        .status(200)
+        .send({ message: 'Успешная авторизация.' });
+    })
+    .catch(() => {
+      res.status(error.UNAUTHORIZED_ERROR).send({ message: 'Неправильные почта или пароль.' });
+    });
+};
+
 module.exports = {
   getUsers,
   getUser,
   createUser,
   editProfile,
   editAvatar,
+  login,
 };

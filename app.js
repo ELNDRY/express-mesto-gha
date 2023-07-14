@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -5,6 +6,8 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
+const authRouter = require('./routes/auth');
+const authVerifier = require('./middlewares/auth')
 
 const PORT = process.env.PORT || 3000;
 
@@ -30,6 +33,7 @@ app.use((req, res, next) => {
 
 app.use(limiter);
 
+app.use('/', authRouter);
 app.use('/', usersRouter);
 app.use('/', cardsRouter);
 app.use('*', (req, res) => {
