@@ -3,10 +3,9 @@ const { celebrate, Joi } = require('celebrate');
 const controller = require('../controllers/cards');
 
 const router = express.Router();
+const URLregEx = /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/;
 
 router.get('/cards', controller.getCards);
-
-const URLregEx = /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/;
 
 router.post('/cards', celebrate({
   body: Joi.object().keys({

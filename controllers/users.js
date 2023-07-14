@@ -21,9 +21,9 @@ const getUserMe = (req, res, next) => {
     .then((user) => res.json(user))
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequestError('Пользователь не найден.');
+        next(new BadRequestError('Пользователь не найден.'));
       } else if (err.name === 'DocumentNotFoundError') {
-        throw new NotFoundError('Пользователь по указанному _id не найден.');
+        next(new NotFoundError('Пользователь по указанному _id не найден.'));
       } else {
         next(err);
       }
@@ -37,9 +37,9 @@ const getUser = (req, res, next) => {
     .then((user) => res.json(user))
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequestError('Передан некорректный id при поиске профиля.');
+        next(new BadRequestError('Передан некорректный id при поиске профиля.'));
       } else if (err.name === 'DocumentNotFoundError') {
-        throw new NotFoundError('Пользователь по указанному _id не найден.');
+        next(new NotFoundError('Пользователь по указанному _id не найден.'));
       } else {
         next(err);
       }
@@ -72,18 +72,16 @@ const createUser = (req, res, next) => {
 };
 
 const editProfile = (req, res, next) => {
-  User.findByIdAndUpdate({
-    userId: req.user._id,
-    name: req.body.name,
-    about: req.body.about,
-  }, { new: true, runValidators: true })
+  const { name, about } = req.body;
+  const userId = req.user._id;
+  User.findByIdAndUpdate(userId, { name, about }, { new: true, runValidators: true })
     .orFail()
     .then((user) => res.json(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequestError('Переданы некорректные данные при обновлении профиля.');
+        next(new BadRequestError('Переданы некорректные данные при обновлении профиля.'));
       } else if (err.name === 'DocumentNotFoundError') {
-        throw new NotFoundError('Пользователь с указанным _id не найден.');
+        next(new NotFoundError('Пользователь с указанным _id не найден.'));
       } else {
         next(err);
       }
@@ -99,9 +97,9 @@ const editAvatar = (req, res, next) => {
     .then((user) => res.json(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequestError('Переданы некорректные данные при обновлении аватара.');
+        next(new BadRequestError('Переданы некорректные данные при обновлении аватара.'));
       } else if (err.name === 'DocumentNotFoundError') {
-        throw new NotFoundError('Пользователь с указанным _id не найден.');
+        next(new NotFoundError('Пользователь с указанным _id не найден.'));
       } else {
         next(err);
       }
