@@ -54,7 +54,6 @@ const createUser = (req, res, next) => {
     }))
     .then((user) => res.status(201).json(user.toJSON()))
     .catch((err) => {
-      console.log(err);
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные при регистрации.'));
       } else if (err.code === 11000) {
