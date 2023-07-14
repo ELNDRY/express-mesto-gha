@@ -11,7 +11,7 @@ const URLregEx = /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/;
 router.post('/cards', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30).required(),
-    link: Joi.string().required().regex(URLregEx),
+    link: Joi.string().required().pattern(URLregEx),
   }),
 }), controller.createCard);
 

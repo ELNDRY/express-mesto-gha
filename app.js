@@ -1,8 +1,9 @@
-require('dotenv').config();
 const express = require('express');
+require('dotenv').config();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const rateLimit = require('express-rate-limit');
+const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const { errors } = require('celebrate');
 const usersRouter = require('./routes/users');
@@ -21,9 +22,11 @@ const limiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
+mongoose.connect('mongodb://0.0.0.0:27017/mestodb');
 
 app.use(helmet());
 app.use(limiter);
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -37,7 +40,5 @@ app.use('*', (req, res, next) => {
 
 app.use(errors());
 app.use(errorHandler);
-
-mongoose.connect('mongodb://0.0.0.0:27017/mestodb');
 
 app.listen(PORT);
