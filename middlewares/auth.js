@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const error = require('../utils/errorStatusCodes');
 const { jwtSecret } = require('../config/authConfig');
 
+// eslint-disable-next-line consistent-return
 const authVerifier = (req, res, next) => {
   const { authorization } = req.headers;
 

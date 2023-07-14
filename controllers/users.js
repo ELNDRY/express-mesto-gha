@@ -10,9 +10,24 @@ const getUsers = (req, res) => {
     .catch(() => res.status(error.DEFAULT_ERROR).send({ message: 'Произошла ошибка.' }));
 };
 
+const getUserMe = (req, res) => {
+  const userId = req.user._id;
+  User.findById(userId)
+    .orFail()
+    .then((user) => res.json(user))
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(error.INCORRECT_INPUT_ERROR).send({ message: 'Пользователь не найден.' });
+      } else if (err.name === 'DocumentNotFoundError') {
+        res.status(error.NOT_FOUND_ERROR).send({ message: 'Пользователь по указанному _id не найден.' });
+      } else {
+        res.status(error.DEFAULT_ERROR).send({ message: 'Произошла ошибка.' });
+      }
+    });
+};
+
 const getUser = (req, res) => {
   const { userId } = req.params;
-
   User.findById(userId)
     .orFail()
     .then((user) => res.json(user))
@@ -106,4 +121,5 @@ module.exports = {
   editProfile,
   editAvatar,
   login,
+  getUserMe,
 };

@@ -7,7 +7,7 @@ const helmet = require('helmet');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 const authRouter = require('./routes/auth');
-const authVerifier = require('./middlewares/auth')
+const authVerifier = require('./middlewares/auth');
 
 const PORT = process.env.PORT || 3000;
 
