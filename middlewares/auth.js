@@ -9,7 +9,7 @@ const authVerifier = (req, res, next) => {
   if (!authorization || !authorization.startsWith('Bearer ')) {
     return res
       .status(error.UNAUTHORIZED_ERROR)
-      .send({ message: 'Необходима авторизация' });
+      .send({ message: 'Необходима авторизация.' });
   }
 
   const token = authorization.replace('Bearer ', '');
@@ -20,7 +20,7 @@ const authVerifier = (req, res, next) => {
   } catch (err) {
     return res
       .status(error.UNAUTHORIZED_ERROR)
-      .send({ message: 'Необходима авторизация' });
+      .send({ message: 'Необходима авторизация.' });
   }
 
   req.user = payload;
