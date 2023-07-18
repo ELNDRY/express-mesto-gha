@@ -4,6 +4,7 @@ const corsResolver = (req, res, next) => {
   const { origin } = req.headers; // save the request source to the origin variable
   const { method } = req; // save the request type (HTTP method) to the corresponding variable
 
+  console.log(origin);
   // save the list of headers of the original request
   const requestHeaders = req.headers['access-control-request-headers'];
 
@@ -11,7 +12,6 @@ const corsResolver = (req, res, next) => {
   const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
   // check that the source of the request is allowed one
   if (allowedCors.includes(origin)) {
-    console.log(origin);
     // set the header that allows the browser to make requests from this source
     res.header('Access-Control-Allow-Origin', origin);
     res.header('Access-Control-Allow-Credentials', true);
