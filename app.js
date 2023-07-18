@@ -1,12 +1,12 @@
-const express = require('express');
 require('dotenv').config();
+const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const rateLimit = require('express-rate-limit');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const { errors } = require('celebrate');
-const { corsResolver } = require('./middlewares/cors');
+const corsResolver = require('./middlewares/cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');

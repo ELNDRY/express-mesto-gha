@@ -1,6 +1,6 @@
 const allowedCors = require('../utils/allowedCors');
 
-const corsResolver = (req, res, next) => {
+module.exports = (req, res, next) => {
   const { origin } = req.headers; // save the request source to the origin variable
   const { method } = req; // save the request type (HTTP method) to the corresponding variable
 
@@ -28,5 +28,3 @@ const corsResolver = (req, res, next) => {
 
   next();
 };
-
-module.exports = corsResolver;
