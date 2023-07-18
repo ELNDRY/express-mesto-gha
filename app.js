@@ -31,9 +31,9 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(corsResolver);
 app.use(requestLogger);
 app.use(limiter);
+app.use(corsResolver);
 
 app.get('/crash-test', () => {
   setTimeout(() => {
