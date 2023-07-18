@@ -4,7 +4,6 @@ const corsResolver = (req, res, next) => {
   const { origin } = req.headers; // save the request source to the origin variable
   const { method } = req; // save the request type (HTTP method) to the corresponding variable
 
-  console.log(origin);
   // save the list of headers of the original request
   const requestHeaders = req.headers['access-control-request-headers'];
 
