@@ -23,4 +23,6 @@ router.post('/signin', celebrate({
   }),
 }), controller.login);
 
+router.post('/signin', controller.logout);
+
 module.exports = router;
