@@ -6,7 +6,7 @@ const rateLimit = require('express-rate-limit');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const { errors } = require('celebrate');
-const corsResolver = require('./middlewares/cors');
+const cors = require('cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
@@ -14,6 +14,7 @@ const authRouter = require('./routes/auth');
 const authVerifier = require('./middlewares/auth');
 const errorHandler = require('./middlewares/errorHandler');
 const NotFoundError = require('./errors/NotFoundError');
+const corsOptions = require('./utils/corsOptions');
 
 const PORT = process.env.PORT || 3000;
 
@@ -33,7 +34,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
 app.use(limiter);
-app.use(corsResolver);
+app.use(cors(corsOptions));
 
 app.get('/crash-test', () => {
   setTimeout(() => {

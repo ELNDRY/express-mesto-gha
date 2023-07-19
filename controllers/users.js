@@ -114,6 +114,7 @@ const login = (req, res, next) => {
       res.cookie('jwt', token, {
         maxAge: 60 * 60 * 24 * 7000,
         httpOnly: true,
+        secure: true,
       })
         .status(200)
         .send({ message: 'Успешная авторизация.' });
@@ -126,7 +127,6 @@ const login = (req, res, next) => {
 const logout = (req, res) => {
   res.clearCookie('jwt', {
     sameSite: 'none',
-    secure: true,
   })
     .send({ message: 'Успешный выход из профиля' });
 };
