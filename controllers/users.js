@@ -106,43 +106,14 @@ const editAvatar = (req, res, next) => {
     });
 };
 
-function setCookie(name, value, options = {}) {
-
-  options = {
-    path: '/',
-    // add other defaults here if necessary
-    ...options
-  };
-
-  if (options.expires instanceof Date) {
-    options.expires = options.expires.toUTCString();
-  }
-
-  let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
-
-  for (let optionKey in options) {
-    updatedCookie += "; " + optionKey;
-    let optionValue = options[optionKey];
-    if (optionValue !== true) {
-      updatedCookie += "=" + optionValue;
-    }
-  }
-
-  document.cookie = updatedCookie;
-}
-
 const login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials({ email, password })
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
-      document.cookie = encodeURIComponent('jwt') + '=' + encodeURIComponent(token);
-      setCookie('jwt', token, {
-        sameSite: 'none',
-        secure: true,
-      })
+      document.cookie = encodeURIComponent('jwt') + '=' + encodeURIComponent(token) + '; SameSite=None; Secure';
       res.cookie('jwt', token, {
-        'maxAge': 60 * 60 * 24 * 7000,
+        maxAge: 60 * 60 * 24 * 7000,
         httpOnly: true,
       })
         .status(200)
