@@ -125,7 +125,7 @@ const login = (req, res, next) => {
 
 const logout = (req, res) => {
   res.clearCookie('jwt', {
-    sameSite: 'none',
+    sameSite: true,
     secure: true,
   })
     .send({ message: 'Успешный выход из профиля' });
